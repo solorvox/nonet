@@ -15,3 +15,7 @@ You can manually block access to a Steam library game by setting the "Launch Opt
 `nonet %command%`
 
 Steam will fill in the %command% with the default application.  
+
+# Tips
+- Put the script to your $HOME/bin directory so it will be in your path for easy access
+- All children processes launched will inherit the group and also be blocked.  Running `nonet steam` would block *all* access to steam and any games run. 
