@@ -31,7 +31,7 @@ TESTIP=$(route -n | grep 'UG[ \t]' | awk '{print $2}')
 IPTCMD="/sbin/iptables -I OUTPUT -m owner --gid-owner $GROUP ! -d 127.0.0.0/8 -j REJECT --reject-with icmp-net-unreachable"
 
 # Ensure we have a group first
-sg $GROUP "pwd > /dev/null"
+getent group $GROUP > /dev/null 2>&1
 RCODE=$?
 if [ $RCODE -ne 0 ]; then
 	echo "ERROR: Group [$GROUP] was not found!"
@@ -49,8 +49,8 @@ if [ $RCODE -eq 0 ]; then
 	echo "located in /etc/network/if-pre-up.d/$GROUP running this command:"
 	echo $IPTCMD
 	echo
-	echo "This script can run this command via sudo but it will not persist"
-	echo "after a reboot. (Timeout in 15 seconds to no)"
+	echo "You may add this rule now but it will not persist"
+	echo "after a reboot. (Timeouts in 15 seconds with 'no')"
 	echo -n "Run iptables command with sudo now? [y/N]? "
 	read -t 15 ans
 	echo
@@ -66,7 +66,7 @@ if [ $RCODE -eq 0 ]; then
 	fi
 fi
 
-if [ "${1}" == "" ]; then
+if [[ -z "${1}" ]]; then
 	echo "Usage: $(basename $0) <command>"
 	echo "Notes:  This script checks for network conectivity on each run."
 	echo "If it can ping your default route (or TESTIP), it then asks if "
