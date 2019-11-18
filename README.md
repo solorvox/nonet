@@ -2,7 +2,7 @@
 Command line script used for per-application firewall blocking
 
 # Installation
-Run ./install.sh, the script will require sudo to copy the iptables boot script and create the system group.
+Run `./install.sh`, the script will require sudo to copy the iptables boot script and create the system group.  You may decline the boot script but the group is required to function.
 
 # Manual Installation
 Copy `nonet` into your `$HOME/bin` directory and ensure it is marked as executable using `chmod +x nonet`.
