@@ -54,7 +54,7 @@ if [ $RCODE -eq 0 ]; then
 	echo -n "Run iptables command with sudo now? [y/N]? "
 	read -t 15 ans
 	echo
-	if [ "$ans" == "y" ]; then
+	if [ "$ans" == "y" -o "$ans" == "Y" ]; then
 		sudo $IPTCMD 
 		if [ $? -ne 0 ]; then
 			echo "Error: sudo or iptables rule failed.";

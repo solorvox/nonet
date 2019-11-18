@@ -1,7 +1,17 @@
 # nonet
 Command line script used for per-application firewall blocking
 
-# usage
+# Installation
+Run ./install.sh, the script will require sudo to copy the iptables boot script and create the system group.
+
+# Manual Installation
+Copy `nonet` into your `$HOME/bin` directory and ensure it is marked as executable using `chmod +x nonet`.
+
+Create a system group nonet, remove the password and add the current user to the group list.
+
+You can install the iptables boot script located in `etc/network/if-pre-up.d/nonet` into your `/etc` directory or manually add it each boot.  
+
+# Usage
 `nonet ping www.google.com`
 
 or 
@@ -23,6 +33,4 @@ Steam will fill in the %command% with the default application.
 # Tips
 - Put the script to your $HOME/bin directory so it will be in your path for easy access
 - All child processes will also inherit the group and thus be blocked.  Running `nonet steam` would block *all* access to steam and any games run.
-- If you want to quick insert the blocking rule to iptables, simply open a terminal and run `nonet` without arguments.  It will prompt you to add the rule via sudo. Adding a rule this way will only be good until you reboot.
-- For a permanent blocking rule, add a script to `/etc/network/if-pre-up.d/nonet` with the following:
-`/sbin/iptables -I OUTPUT -m owner --gid-owner nonet ! -d 127.0.0.0/8 -j REJECT --reject-with icmp-net-unreachable` or using your favourite firewall tool.
+- nonet run will check for the iptables rule on run and prompt to add if network access is detected.  See installation for system boot script. 

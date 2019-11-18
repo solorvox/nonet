@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Add rule to block any process with a group of nonet
+# make sure the group exists before rebooting
+/sbin/iptables -I OUTPUT -m owner --gid-owner nonet \! -d 127.0.0.0/8 -j REJECT --reject-with icmp-net-unreachable
