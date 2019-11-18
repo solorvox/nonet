@@ -1,15 +1,21 @@
-# nonet
-Command line script used for per-application firewall blocking
+﻿# nonet
+Command line script used for per-application firewall blocking.
+
+# Download
 
 # Installation
-Run `./install.sh`, the script will require sudo to copy the iptables boot script and create the system group.  You may decline the boot script but the group is required to function.
+First clone the repo
+
+`git clone https://github.com/solorvox/nonet`
+
+Then `cd nonet` and run `./install.sh`.  The script will require sudo to copy the iptables boot script and create the system group.  You may decline the boot script installation but the system group is required.
 
 # Manual Installation
-Copy `nonet` into your `$HOME/bin` directory and ensure it is marked as executable using `chmod +x nonet`.
-
 Create a system group nonet, remove the password and add the current user to the group list.
 
-You can install the iptables boot script located in `etc/network/if-pre-up.d/nonet` into your `/etc` directory or manually add it each boot.  
+Copy `nonet` into your `$HOME/bin` directory and ensure it is marked as executable using `chmod +x nonet`.
+
+You can install the provided iptables boot script located in `etc/network/if-pre-up.d/nonet` into your `/etc` directory or manually add that rule each boot.  
 
 # Usage
 `nonet ping www.google.com`
@@ -19,9 +25,9 @@ or
 `nonet firefox`
 
 # Network access test
-By default `nonet` will allow access to localhost (127.0.0.0/8) but will block all other outbound traffic.  The script will test for the existance of group `nonet` and abort if not found.  
+By default `nonet` will allow access to localhost (127.0.0.0/8) but will block all other outbound traffic.  The script will test for the existence of group `nonet` and abort if not found.  
 
-It then attempts to ping your default gateway.  If successful, it will prompt the user to to run a iptables command via sudo.  That command blocks outbound traffic from any process with the group `nonet`.   This question has a time-out of 15 seconds with a default of `no`. In the event it was run from a GUI the user would not see the request for input on the terminal.  If your application appears to stop loading, please check it can run from the command line and verify the output. 
+It then attempts to ping your default gateway.  If successful, it will prompt the user to add a rule to iptables via sudo.  That command blocks outbound traffic from any process with the group `nonet`.   The prompt has a time-out of 15 seconds with a defaulting to `no`. In the event it was run from a GUI the user would not see the request for input on the terminal.  This will then exit with an error.  If your application appears to stop loading, please check it can run from the command line and verify the output.  Adding the boot rule script will prevent this problem.
 
 # Steam games 
 To manually block access to a Steam library item, right click on the name in the list and select *properties*.  Then on the *General* tab select "Set Launch Options".  Change the field to:
@@ -30,7 +36,18 @@ To manually block access to a Steam library item, right click on the name in the
 
 Steam will replace *%command%* with the default command line for the application.  
 
+
+# Updates
+To update any changes from a previously installed update git via:
+
+`git pull origin master`
+
+Then you can re-run `./install.sh` to copy over any changes.
+
+# Uninstall
+Simply run the provided script `./uninstall.sh`
+
+
 # Tips
-- Put the script to your $HOME/bin directory so it will be in your path for easy access
 - All child processes will also inherit the group and thus be blocked.  Running `nonet steam` would block *all* access to steam and any games run.
-- nonet run will check for the iptables rule on run and prompt to add if network access is detected.  See installation for system boot script. 
+- nonet run will check for network access and prompt for sudo access to run iptables to add the rule when run from terminal.  See installation for system boot script to have this done automatically.

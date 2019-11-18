@@ -55,12 +55,16 @@ read ans
 if [ "$ans" == "y" -o "$ans" == "Y" ]; then
 	echo " installing ${NETSCR}nonet to /${NETSCR}"
 	sudo cp ${NETSCR}nonet /${NETSCR}
+	echo "Attempting to run iptables rule"
+	sudo /${NETSCR}nonet
 else
 	echo " skipped boot iptable rule script"
+	echo "NOTE: you must either manually add the iptables rule or run nonet and add it after each reboot."
 fi
 
-echo "Installation complete."
+echo 
+echo "Installation complete!"
 if [ "$GROUPADD" == "1" ]; then
 	echo
-	echo "NOTE: When adding new system group, it often is required you logout and back to use the new group."
+	echo "NOTE: After adding new system group you are required to logout and back in to use the new group."
 fi
