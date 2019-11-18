@@ -24,11 +24,11 @@ By default `nonet` will allow access to localhost (127.0.0.0/8) but will block a
 It then attempts to ping your default gateway.  If successful, it will prompt the user to to run a iptables command via sudo.  That command blocks outbound traffic from any process with the group `nonet`.   This question has a time-out of 15 seconds with a default of `no`. In the event it was run from a GUI the user would not see the request for input on the terminal.  If your application appears to stop loading, please check it can run from the command line and verify the output. 
 
 # Steam games 
-You can manually block access to a Steam library game by setting the "Launch Options" on the General tab of properties.
+To manually block access to a Steam library item, right click on the name in the list and select *properties*.  Then on the *General* tab select "Set Launch Options".  Change the field to:
 
 `nonet %command%`
 
-Steam will fill in the %command% with the default application.  
+Steam will replace *%command%* with the default command line for the application.  
 
 # Tips
 - Put the script to your $HOME/bin directory so it will be in your path for easy access
