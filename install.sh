@@ -18,16 +18,26 @@
 
 NETSCR="etc/network/if-pre-up.d/"
 GROUP="nonet"
+DEFAULT_DIR="/usr/local/bin"
 
-if [ ! -d $HOME/bin ]; then
-	echo "Creating local user binaries directory $HOME/bin"
-	mkdir $HOME/bin
+echo -n "Install path for script [press enter for default: $DEFAULT_DIR] ? "
+read insdir
+
+if [ -z "$insdir" ]; then
+	DST=$DEFAULT_DIR
+else
+	DST=$insdir
 fi
+
+if [ ! -d "$DST" ]; then
+	echo "Creating directory $DST"
+	sudo mkdir -p "$DST"
+fi
+
 # ensure execute bit
 chmod +x nonet
-echo "Copying nonet to $HOME/bin"
-cp nonet $HOME/bin
-
+echo "Copying nonet to $DST"
+sudo cp nonet "$DST"
 
 # ensure execute bit
 chmod +x ${NETSCR}/nonet
