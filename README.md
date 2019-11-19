@@ -11,7 +11,7 @@ Then `cd nonet` and run `./install.sh`.  The script will require sudo to copy th
 # Manual installation
 Create a system group nonet, remove the password and add the current user to the group list.
 
-Copy `nonet` into your `$HOME/bin` directory and ensure it is marked as executable using `chmod +x nonet`.
+Copy `nonet` into your $PATH somewhere like the `$HOME/bin` directory and ensure it is marked as executable using `chmod +x nonet`.
 
 You can install the provided iptables boot script located in `etc/network/if-pre-up.d/nonet` into your `/etc` directory or manually add that rule each boot.  
 
