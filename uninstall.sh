@@ -18,12 +18,12 @@
 
 NETSCR="etc/network/if-pre-up.d/"
 GROUP="nonet"
-DEFAULT_DIR="/usr/local/bin"
+SCRIPT=$(which nonet)
 
 echo -n "Checking for script... "
-if [ -f "$DEFAULT_DIR/nonet" ]; then
-	sudo rm "$DEFAULT_DIR/nonet"
-	echo "removed $DEFAULT_DIR/nonet"
+if [ -f "$SCRIPT" ]; then
+	echo "found [$SCRIPT] removing"
+	sudo rm "$SCRIPT"
 else
 	echo "not found"
 fi
