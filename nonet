@@ -73,7 +73,10 @@ if [[ -z "${1}" ]]; then
 	echo "you wish to add an iptables rule to block access to ($GROUP)."
 	echo
 	echo "TIP: Steam users can prefix games by changing the \"Launch Options\""
-	echo "nonet %command%"
+	echo "nonet \"%command%\""
+	echo
+	echo "Note the double quotes are required for proton usage due to "
+	echo "spaces in directory name."
 	exit 0;
 fi
 
