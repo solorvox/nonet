@@ -22,10 +22,11 @@ GROUP="nonet"
 # IP address to test that group CANNOT access.  If ping to this
 # address is successful, then something is wrong with setup.
 # Good example could be your router's external IP (faster) or use
-# address of google's DNS 8.8.8.8
-#TESTIP="8.8.8.8"
+# address of google's DNS 8.8.8.8  Normally this ping should fail
+TESTIP="8.8.8.8"
+
 # Default: grabs the default gateway
-TESTIP=$(route -n | grep 'UG[ \t]' | awk '{print $2}')
+#TESTIP=$(route -n | grep 'UG[ \t]' | awk '{print $2}')
 
 # command to run iptables to insert blocking rule, block all but localhost
 IPTCMD="/sbin/iptables -I OUTPUT -m owner --gid-owner $GROUP ! -d 127.0.0.0/8 -j REJECT --reject-with icmp-net-unreachable"
@@ -80,9 +81,17 @@ if [[ -z "${1}" ]]; then
 	exit 0;
 fi
 
-COMMAND="$1"
-shift
-for arg; do
-	COMMAND="$COMMAND \"$arg\""
-done
-sg $GROUP "$COMMAND"
+# nasty dirty hack to work around steam spaces and 'sg' not playing well, patches welcome for better fix :)
+if [[ "$@" == *"Proton"* ]]; then
+	COMMAND=$(echo $@ | sed 's|common/Proton |common/Proton\\ |')
+	SS=/tmp/nonet-exe.$$
+	echo "#!/bin/bash" > $SS
+	echo $COMMAND >> $SS
+	chmod +x $SS
+	sg $GROUP -c $SS
+	rm $SS
+else
+	COMMAND=$1
+	shift
+	sg $GROUP -c "$COMMAND $@"
+fi
