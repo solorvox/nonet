@@ -4,5 +4,20 @@
 RULE=$(/sbin/iptables -L OUTPUT |grep GID.*nonet)
 
 if [ -z "$RULE" ]; then
-	/sbin/iptables -I OUTPUT -m owner --gid-owner nonet \! -d 127.0.0.0/8 -j REJECT --reject-with icmp-net-unreachable
+	/sbin/iptables -N nonet-reject
+	/sbin/iptables -A nonet-reject -d 127.0.0.0/8 -j RETURN
+	# uncomment your LAN ip space if desired
+	#/sbin/iptables -A nonet-reject -d 10.0.0.0/8 -j RETURN
+	#/sbin/iptables -A nonet-reject -d 192.168.0.0/16 -j RETURN
+	#/sbin/iptables -A nonet-reject -d 172.16.0.0/16 -j RETURN
+
+	# whitelist any other IPs here as well
+	#/sbin/iptables -A nonet-reject -d 1.2.3.4 -j RETURN
+
+	# finally log/reject anything else
+	/sbin/iptables -A nonet-reject -j LOG --log-prefix "nonet-reject:" --log-level 6
+	/sbin/iptables -A nonet-reject -j REJECT --reject-with icmp-net-unreachable
+
+	# filter all packets with group through chain
+	/sbin/iptables -I OUTPUT -m owner --gid-owner nonet -j nonet-reject
 fi
