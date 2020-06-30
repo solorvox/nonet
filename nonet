@@ -24,8 +24,9 @@ GROUP="nonet"
 # Good example could be your router's external IP (faster) or use
 # address of google's DNS 8.8.8.8
 #TESTIP="8.8.8.8"
+TESTIP="192.168.178.1"
 # Default: grabs the default gateway
-TESTIP=$(route -n | grep 'UG[ \t]' | awk '{print $2}')
+#TESTIP=$(route -n | grep 'UG[ \t]' | awk '{print $2}')
 
 # command to run iptables to insert blocking rule, block all but localhost
 IPTCMD="/sbin/iptables -I OUTPUT -m owner --gid-owner $GROUP ! -d 127.0.0.0/8 -j REJECT --reject-with icmp-net-unreachable"
@@ -82,7 +83,8 @@ fi
 
 COMMAND="$1"
 shift
-for arg; do
-	COMMAND="$COMMAND \"$arg\""
+for arg in "$@"; do
+	COMMAND="$COMMAND $arg"
 done
-sg $GROUP "$COMMAND"
+
+sg $GROUP -c "$COMMAND"
