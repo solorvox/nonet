@@ -49,3 +49,4 @@ Simply run the provided script `./uninstall.sh`
 # Tips
 - All child processes will also inherit the group and thus be blocked.  Running `nonet steam` would block *all* access to steam and any games run.
 - nonet run will check for network access and prompt for sudo access to run iptables to add the rule when run from terminal.  See installation for system boot script to have this done automatically.
+- Take a look at the etc/network/if-pre-up.d/nonet for options to whitelist and disable logging.  You will need to modifiy your TESTIP in the base nonet script.  You could use your ISP's DNS or router for example.
