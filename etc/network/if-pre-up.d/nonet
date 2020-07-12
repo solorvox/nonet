@@ -1,23 +1,39 @@
 #!/bin/sh
 
+IPT="iptables"
+
+# check for iptables binary
+which iptables > /dev/null
+if [ $? -ne 0 ]; then
+	# change this to suit your needs
+	if [ -f "/sbin/iptables" ]; then
+		IPT="/sbin/iptables"
+	elif [ -f "/usr/sbin/iptables" ]; then
+		IPT="/usr/sbin/iptables"
+	else	
+		echo "ERROR: nonet if-pre-up.d script was unable to find iptables binary in your system path or filesystem."
+		logger "ERROR: nonet if-pre-up.d script was unable to find iptables binary in your system path or filesystem."
+		exit -1
+	fi
+fi
+
 # Check for rule and add if needed. Please make sure the group exists
-RULE=$(/sbin/iptables -L OUTPUT |grep GID.*nonet)
+RULE=$($IPT -L OUTPUT |grep GID.*nonet)
 
 if [ -z "$RULE" ]; then
-	/sbin/iptables -N nonet-reject
-	/sbin/iptables -A nonet-reject -d 127.0.0.0/8 -j RETURN
-	# uncomment your LAN ip space if desired
-	#/sbin/iptables -A nonet-reject -d 10.0.0.0/8 -j RETURN
-	#/sbin/iptables -A nonet-reject -d 192.168.0.0/16 -j RETURN
-	#/sbin/iptables -A nonet-reject -d 172.16.0.0/16 -j RETURN
-
-	# whitelist any other IPs here as well
-	#/sbin/iptables -A nonet-reject -d 1.2.3.4 -j RETURN
+	$IPT -N nonet-reject
+	$IPT -A nonet-reject -d 127.0.0.0/8 -j RETURN
+	# uncomment your LAN ip space if desired to allow local access only
+	#$IPT -A nonet-reject -d 10.0.0.0/8 -j RETURN
+	#$IPT -A nonet-reject -d 192.168.0.0/16 -j RETURN
+	#$IPT -A nonet-reject -d 172.16.0.0/16 -j RETURN
+	# you can also whitelist any other IPs here as well
+	#$IPT -A nonet-reject -d 1.2.3.4 -j RETURN
 
 	# finally log/reject anything else
-	/sbin/iptables -A nonet-reject -j LOG --log-prefix "nonet-reject:" --log-level 6
-	/sbin/iptables -A nonet-reject -j REJECT --reject-with icmp-net-unreachable
+	$IPT -A nonet-reject -j LOG --log-prefix "nonet-reject:" --log-level 6
+	$IPT -A nonet-reject -j REJECT --reject-with icmp-net-unreachable
 
 	# filter all packets with group through chain
-	/sbin/iptables -I OUTPUT -m owner --gid-owner nonet -j nonet-reject
+	$IPT -I OUTPUT -m owner --gid-owner nonet -j nonet-reject
 fi
