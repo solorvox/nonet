@@ -82,16 +82,19 @@ if [[ -z "${1}" ]]; then
 fi
 
 # nasty dirty hack to work around steam spaces and 'sg' not playing well, patches welcome for better fix :)
+SS=$(mktemp)
+
+echo "#!/bin/bash" > $SS
 if [[ "$@" == *"Proton"* ]]; then
-	COMMAND=$(echo $@ | sed 's|common/Proton |common/Proton\\ |')
-	SS=/tmp/nonet-exe.$$
-	echo "#!/bin/bash" > $SS
-	echo $COMMAND >> $SS
-	chmod +x $SS
-	sg $GROUP -c $SS
-	rm $SS
-else
-	COMMAND=$1
-	shift
-	sg $GROUP -c "$COMMAND $@"
+	# list of vars that are not exported propery
+	EXPORT_VARS="LD_LIBRARY_PATH WINEPREFIX WINEDLLOVERRIDES WINE_LARGE_ADDRESS_AWARE"
+	for var in $EXPORT_VARS; do
+		echo "export $var=${!var}" >> $SS
+	done
 fi
+COMMAND="\"$1\""
+shift 1
+echo "\"$COMMAND\" $@" >> $SS
+chmod +x $SS
+sg $GROUP -c $SS
+rm $SS

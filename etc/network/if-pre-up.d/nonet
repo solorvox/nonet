@@ -11,8 +11,7 @@ if [ $? -ne 0 ]; then
 	elif [ -f "/usr/sbin/iptables" ]; then
 		IPT="/usr/sbin/iptables"
 	else	
-		echo "ERROR: nonet if-pre-up.d script was unable to find iptables binary in your system path or filesystem."
-		logger "ERROR: nonet if-pre-up.d script was unable to find iptables binary in your system path or filesystem."
+		logger -s "ERROR: nonet if-pre-up.d script was unable to find iptables binary in your system path or filesystem."
 		exit -1
 	fi
 fi
