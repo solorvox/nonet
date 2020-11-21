@@ -30,10 +30,9 @@ It then attempts to ping your default gateway.  If successful, it will prompt th
 # Steam games 
 To manually block access to a Steam library item, right click on the name in the list and select *properties*.  Then on the *General* tab select "Set Launch Options".  Change the field to:
 
-`nonet "%command%"`
+`nonet %command%`
 
-Steam will replace *%command%* with the default command line for the application.  You will still be able to receive achievements but the game will not be allowed out. Note the double quotes required because of spaces used in Proton directory names.
-
+Steam will replace *%command%* with the default command line for the application.  You will still be able to receive achievements but the game will not be allowed out. 
 
 # Updates
 To update any changes from a previously installed update git via:

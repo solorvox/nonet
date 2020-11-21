@@ -74,27 +74,10 @@ if [[ -z "${1}" ]]; then
 	echo "you wish to add an iptables rule to block access to ($GROUP)."
 	echo
 	echo "TIP: Steam users can prefix games by changing the \"Launch Options\""
-	echo "nonet \"%command%\""
-	echo
-	echo "Note the double quotes are required for proton usage due to "
-	echo "spaces in directory name."
+	echo "nonet %command%"
 	exit 0;
 fi
 
-# nasty dirty hack to work around steam spaces and 'sg' not playing well, patches welcome for better fix :)
-SS=$(mktemp)
-
-echo "#!/bin/bash" > $SS
-if [[ "$@" == *"Proton"* ]]; then
-	# list of vars that are not exported propery
-	EXPORT_VARS="LD_LIBRARY_PATH WINEPREFIX WINEDLLOVERRIDES WINE_LARGE_ADDRESS_AWARE"
-	for var in $EXPORT_VARS; do
-		echo "export $var=${!var}" >> $SS
-	done
-fi
-COMMAND="\"$1\""
-shift 1
-echo "\"$COMMAND\" $@" >> $SS
-chmod +x $SS
-sg $GROUP -c $SS
-rm $SS
+# deal with spaces in the path/command from steam arguments
+printf -v CMD '%q ' "$@"
+sg "$GROUP" -c "$CMD"
