@@ -38,14 +38,14 @@ fi
 
 echo "Checking for nonet iptables rule (sudo required)"
 # remove rule (if valid)
-RULE=$(sudo /sbin/iptables -L OUTPUT |grep 'GID.*nonet')
+RULE=$(sudo /usr/sbin/iptables -L OUTPUT |grep 'GID.*nonet')
 
 if [[ ! -z "$RULE" ]]; then
-	NUM=$(sudo /sbin/iptables --line-numbers -L OUTPUT |grep nonet |  awk '{print $1}')
+	NUM=$(sudo /usr/sbin/iptables --line-numbers -L OUTPUT |grep nonet |  awk '{print $1}')
 	if [[ ! -z "$NUM" ]]; then
 		for n in $NUM; do	
 			echo "Removing iptables rule number $n"
-			sudo /sbin/iptables -D OUTPUT $n
+			sudo /usr/sbin/iptables -D OUTPUT $n
 		done
 	fi
 else

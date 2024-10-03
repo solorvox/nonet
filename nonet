@@ -31,7 +31,7 @@ TESTIP="8.8.8.8"
 #TESTIP=$(route -n | grep 'UG[ \t]' | awk '{print $2}')
 
 # command to run iptables to insert blocking rule, block all but localhost
-IPTCMD="/sbin/iptables -I OUTPUT -m owner --gid-owner $GROUP ! -d 127.0.0.0/8 -j REJECT --reject-with icmp-net-unreachable"
+IPTCMD="/usr/sbin/iptables -I OUTPUT -m owner --gid-owner $GROUP ! -d 127.0.0.0/8 -j REJECT --reject-with icmp-net-unreachable"
 
 # Ensure we have a group first
 getent group $GROUP > /dev/null 2>&1
