@@ -6,14 +6,14 @@ First clone the repo
 
 `git clone https://github.com/solorvox/nonet`
 
-Then `cd nonet` and run `./install.sh`.  The script will require sudo to copy the iptables boot script and create the system group.  You may decline the boot script installation but the system group is required.
+Then `cd nonet` and run `./install.sh`.  The script will require sudo to copy the iptables boot script and create the system group.  You may decline the boot script installation but the system group is required. If you decide to install the boot script, a **logout** is required for the script to be loaded in the system.
 
 # Manual installation
 Create a system group nonet, remove the password and add the current user to the group list.
 
 Copy `nonet` into your $PATH somewhere like the `$HOME/bin` directory and ensure it is marked as executable using `chmod +x nonet`.
 
-You can install the provided iptables boot script located in `etc/network/if-pre-up.d/nonet` into your `/etc` directory or manually add that rule each boot.  
+You can install the provided iptables boot script located in `/etc/NetworkManager/dispatcher.d/pre-up.d/nonet` into your `/etc` directory or manually add that rule each boot. If you decide to install the boot script, a **reboot** is required for the script to be loaded in the system.
 
 # Usage
 `nonet ping www.google.com`
