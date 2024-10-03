@@ -47,7 +47,7 @@ if [ $RCODE -eq 0 ]; then
 	echo "ERROR: Network access to [$TESTIP] detected!"
 	echo ""
 	echo "Ensure you have setup your firewall.  This can be done via a script"
-	echo "located in /etc/network/if-pre-up.d/$GROUP running this command:"
+	echo "located in /etc/NetworkManager/dispatcher.d/pre-up.d/$GROUP running this command:"
 	echo $IPTCMD
 	echo
 	echo "You may add this rule now but it will not persist"
