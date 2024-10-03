@@ -34,6 +34,9 @@ To manually block access to a Steam library item, right click on the name in the
 
 Steam will replace *%command%* with the default command line for the application.  You will still be able to receive achievements but the game will not be allowed out. 
 
+## Important note
+Run the command at least once on the terminal so when you try to open a Steam game, it won't close instantly, because at the first launch of the command it will need an interaction from the user.
+
 # Updates
 To update any changes from a previously installed update git via:
 
