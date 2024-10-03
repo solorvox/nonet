@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-NETSCR="etc/network/if-pre-up.d/"
+NETSCR="etc/NetworkManager/dispatcher.d/pre-up.d/"
 GROUP="nonet"
 DEFAULT_DIR="/usr/local/bin"
 
