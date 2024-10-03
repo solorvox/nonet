@@ -19,6 +19,8 @@
 # name of the group to deny access
 GROUP="nonet"
 
+VERSION="1.2"
+
 # IP address to test that group CANNOT access.  If ping to this
 # address is successful, then something is wrong with setup.
 # Good example could be your router's external IP (faster) or use
@@ -68,6 +70,8 @@ if [ $RCODE -eq 0 ]; then
 fi
 
 if [[ -z "${1}" ]]; then
+	echo "nonet - Network isolation script.  Version: $VERSION"
+	echo
 	echo "Usage: $(basename $0) <command>"
 	echo "Notes:  This script checks for network conectivity on each run."
 	echo "If it can ping your default route (or TESTIP), it then asks if "
@@ -78,6 +82,26 @@ if [[ -z "${1}" ]]; then
 	exit 0;
 fi
 
+# Because steam overlay uses injection based method and 'sg' will
+# not pass LD_* vars, need to use this somewhat ugly workaround
+# to keep the overlay working while still blocking network access.
+SCRIPT="$(mktemp)"
+echo -n "#!" > $SCRIPT
+echo $(which sh) >> $SCRIPT
+echo "cd \"$PWD\"" >> $SCRIPT
+
+# List of env vars to pass to child process
+EXPORT_VARS="LD_LIBRARY_PATH LD_PRELOAD" 
+for var in $EXPORT_VARS; do
+	echo "export $var=${!var}" >> $SCRIPT
+done
+
 # deal with spaces in the path/command from steam arguments
 printf -v CMD '%q ' "$@"
-sg "$GROUP" -c "$CMD"
+echo $CMD >> $SCRIPT
+
+chmod +x $SCRIPT
+sg "$GROUP" -c $SCRIPT
+wait
+# cleanup
+rm $SCRIPT
