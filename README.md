@@ -6,14 +6,16 @@ First clone the repo
 
 `git clone https://github.com/solorvox/nonet`
 
-Then `cd nonet` and run `./install.sh`.  The script will require sudo to copy the iptables boot script and create the system group.  You may decline the boot script installation but the system group is required. If you decide to install the boot script, a **logout** is required for the script to be loaded in the system.
+Then `cd nonet` and run `./install.sh`.  The script will require sudo to copy the iptables boot script and create the system group.  You may decline the boot script installation but the system group is required. 
+
+A **logout** is required for your user account to have access to the new nonet group after installation.
 
 # Manual installation
 Create a system group nonet, remove the password and add the current user to the group list.
 
 Copy `nonet` into your $PATH somewhere like the `$HOME/bin` directory and ensure it is marked as executable using `chmod +x nonet`.
 
-You can install the provided iptables boot script to `/etc/NetworkManager/dispatcher.d/pre-up.d/nonet` so it is run for each reboot. If you decide to install the boot script, a **reboot** is required for the script to be loaded in the system.  
+You can install the provided iptables boot script to `/etc/NetworkManager/dispatcher.d/pre-up.d/nonet` so it is run for each reboot. If you decide to install the boot script, a **reboot** is required for the boot script to be loaded in the system. 
 
 # Usage
 `nonet ping www.google.com`
@@ -33,6 +35,10 @@ To manually block access to a Steam library item, right click on the name in the
 `nonet %command%`
 
 Steam will replace *%command%* with the default command line for the application.  You will still be able to receive achievements but the game will not be allowed out. 
+
+**Important note**: the order of command matters.  Put nonet at start and any subcommands or variables after.  
+
+`nonet mangohud %command%` is correct, where as `mangohud nonet %command%` will not work as expected.
 
 # Updates
 To update any changes from a previously installed update git via:
